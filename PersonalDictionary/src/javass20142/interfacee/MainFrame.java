@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+import java.awt.SystemColor;
 
 public class MainFrame {
 
@@ -95,7 +96,7 @@ public class MainFrame {
 		panel_2.setLayout(null);
 		
 		textField = new JTextField();
-		textField.setBounds(3, 3, 508, 20);
+		textField.setBounds(3, 3, 489, 20);
 		panel_2.add(textField);
 		textField.setColumns(10);
 		
@@ -141,8 +142,9 @@ public class MainFrame {
 		lblNewLabel_1.setText(lyrics);
 		panel_2.add(lblNewLabel_1);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(511, 2, 89, 23);
+		JButton btnNewButton = new JButton("Translate");
+		btnNewButton.setBackground(SystemColor.activeCaption);
+		btnNewButton.setBounds(502, 2, 98, 23);
 		panel_2.add(btnNewButton);
 		
 		JLabel lblNewLabel = new JLabel("Word");
