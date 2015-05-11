@@ -71,7 +71,24 @@ public class Databases {
 		}
 	}
 
+	public ArrayList<String> getListWordEN() {
+		ArrayList<String> listWord = new ArrayList<String>();
+		// initiAndConnectDB();
+		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`tb_dictionary`");
+		try {
+			while (rSet.next()) {
+				listWord.add(rSet.getString("wordEN"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return listWord;
+
+	}
+
 	public void upDateData(String sql) {
+		// initiAndConnectDB();
 		try {
 			statement.executeUpdate(sql);
 		} catch (SQLException e) {
@@ -90,41 +107,16 @@ public class Databases {
 		System.out.println("connection closed...");
 	}
 
-	// public void show(ResultSet rSet, String colum) throws SQLException {
-	// while (rSet.next()) {
-	// String string = rSet.getString(colum);
-	// System.out.println(string);
-	// }
-	// }
-
-	public void insertDB(int wordID, String wordEN, String wordVI) {
-		String sql = "INSERT INTO `dictionary`.`tb_dictionary` (`wordID`, `wordEN`, `wordVI`) VALUES ("
-				+ wordID + ", 'sjdw9sddf', 'f', 'g')";
-
-		try {
-			statement.executeUpdate(sql);
-			// statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void insertDB(String wordEN, String wordVI) {
+		String sql = "INSERT INTO `dictionary`.`tb_dictionary` (`wordEN`, `wordVI`) VALUES ('"
+				+ wordEN + "', '" + wordVI + "')";
+		upDateData(sql);
 		System.out.println("Inserted records into the table...");
 
 	}
 
-	public ResultSet selectRecord() {
-		String sql = "SELECT wordID, wordEN, wordVI, wordNote FROM `dictionary`.`tbl_dictionary`";
-		ResultSet resultSet = null;
-		try {
-			resultSet = statement.executeQuery(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return resultSet;
-
-	}
-
 	public String getwordVI(String wordEN) {
-		ResultSet rSet = getResult("SELECT DISTINCT wordVI FROM `dictionary`.`tbl_dictionary`"
+		ResultSet rSet = getResult("SELECT DISTINCT wordVI FROM `dictionary`.`tb_dictionary`"
 				+ " WHERE wordEN='" + wordEN + "'");
 		try {
 			while (rSet.next()) {
@@ -134,82 +126,7 @@ public class Databases {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return wordEN;
+		return null;
 
 	}
-
-	public ArrayList<String> getListWord() {
-		ArrayList<String> listWord = new ArrayList<String>();
-		initiAndConnectDB();
-		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`tb_dictionary`");
-		try {
-			while (rSet.next()) {
-				listWord.add(rSet.getString("wordEN"));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return listWord;
-
-	}
-
-	// test class
-	public static void main(String args[]) {
-		Databases testDbUtils = new Databases();
-		testDbUtils.initiAndConnectDB();
-		testDbUtils
-				.upDateData("UPDATE `dictionary`.`tb_dictionary` SET `wordVI`=' không ra gì' WHERE `wordID`='7'");
-		try {
-			testDbUtils.closeColection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// ResultSet rs = testDbUtils.selectRecord();
-		// ResultSet rs = testDbUtils
-		// .getResult("SELECT wordID, wordEN, wordVI, wordNote FROM `dictionary`.`tbl_dictionary`");
-		// try {
-		// while (rs.next()) {
-		// // Retrieve by column name
-		// int id = rs.getInt("wordID");
-		// String age = rs.getString("wordEN");
-		// String first = rs.getString("wordVI");
-		// String last = rs.getString("wordNote");
-		//
-		// // Display values
-		// System.out.print("ID:     " + id);
-		// System.out.print(", wordEN: " + age);
-		// System.out.print(", wordVI: " + first);
-		// System.out.println(", wordNote: " + last);
-		// }
-		// } catch (SQLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// System.out.println();
-		// testDbUtils
-		// .upData("UPDATE `dictionary`.`tbl_dictionary` SET wordVI = 'hihi' WHERE wordEN = 'hello'");
-		// ResultSet rSet = testDbUtils
-		// .getData("SELECT  wordVI FROM dictionary.tbl_dictionary");
-		// try {
-		// testDbUtils.show(rSet, "wordVI");
-		// testDbUtils.closeColection();
-		// } catch (SQLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// testDbUtils.insertDB(196, "sdfafaa", "dsfa", "dssfa");
-		// ResultSet rSet2 = testDbUtils
-		// .getData("SELECT  wordEN FROM dictionary.tbl_dictionary");
-		// try {
-		// testDbUtils.show(rSet2, "wordEN");
-		// // testDbUtils.closeColection();
-		// } catch (SQLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
-	}
-
 }

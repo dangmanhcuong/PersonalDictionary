@@ -10,7 +10,7 @@ public class TranslateWord {
 
 	public ArrayList<String> getListWord() {
 		Databases dbUtils = new Databases();
-		listWord = dbUtils.getListWord();
+		listWord = dbUtils.getListWordEN();
 		try {
 			dbUtils.closeColection();
 		} catch (SQLException e) {
@@ -60,7 +60,7 @@ public class TranslateWord {
 		Databases dbUtils = new Databases();
 		TranslateWord testTranslateWord = new TranslateWord();
 		ArrayList<String> listWord2 = new ArrayList<String>();
-		listWord2 = dbUtils.getListWord();
+		listWord2 = dbUtils.getListWordEN();
 		try {
 			dbUtils.closeColection();
 		} catch (SQLException e) {
