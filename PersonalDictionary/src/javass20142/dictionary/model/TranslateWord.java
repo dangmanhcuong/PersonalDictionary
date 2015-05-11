@@ -5,8 +5,28 @@ import java.util.ArrayList;
 
 import javass20142.dictionary.database.Databases;
 
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+
 public class TranslateWord {
 	ArrayList<String> listWord = new ArrayList<String>();
+	Databases databases = new Databases();
+
+	// private JTextField wordSearch;
+	// private JList jListWordEN;
+	// private JTextPane txtWordVI;
+	public void translateWord(JTextField wordSearch, JTextPane txtWordVI) {
+		String wordsearch = wordSearch.getText();
+		if (checkWord(wordsearch)) {
+			txtWordVI.setText(databases.getwordVI(wordsearch));
+
+		} else {
+			txtWordVI
+					.setText("word is not in the database enter or misspelled");
+
+		}
+
+	}
 
 	public ArrayList<String> getListWord() {
 		Databases dbUtils = new Databases();
@@ -20,10 +40,10 @@ public class TranslateWord {
 		return listWord;
 	}
 
-	public boolean checkWord(String wordString) {
+	public boolean checkWord(String wordEN) {
 		ArrayList<String> listWord = getListWord();
 		for (int i = 0; i < listWord.size(); i++) {
-			if (wordString.equalsIgnoreCase(listWord.get(i)))
+			if (wordEN.equalsIgnoreCase(listWord.get(i)))
 				return true;
 		}
 		return false;
@@ -41,43 +61,6 @@ public class TranslateWord {
 				}
 		}
 		return result;
-
-		// String str1 = "1bkhn";
-		// String str2 = "bk";
-		//
-		// if(str2.equals(str1.substring(0, str2.length()))){
-		// System.out.println("true 111111111111111");
-		// }
-		//
-		// if (str1.contains(str2)) {
-		// System.out.println("true");
-		// }
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		// TranslateWord testTranslateWord = new TranslateWord();
-		Databases dbUtils = new Databases();
-		TranslateWord testTranslateWord = new TranslateWord();
-		ArrayList<String> listWord2 = new ArrayList<String>();
-		listWord2 = dbUtils.getListWordEN();
-		try {
-			dbUtils.closeColection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		for (int i = 0; i < listWord2.size(); i++) {
-			System.out.println(listWord2.get(i));
-		}
-		// System.out.print(testTranslateWord.searchWord1("234234"));
-		ArrayList<String> testArrayList = testTranslateWord.searchWord2("bk",
-				listWord2);
-		for (int i = 0; i < testArrayList.size(); i++) {
-			System.out.println(testArrayList.get(i));
-
-		}
-
 	}
 
 }

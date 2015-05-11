@@ -73,7 +73,7 @@ public class Databases {
 
 	public ArrayList<String> getListWordEN() {
 		ArrayList<String> listWord = new ArrayList<String>();
-		// initiAndConnectDB();
+		initiAndConnectDB();
 		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`tb_dictionary`");
 		try {
 			while (rSet.next()) {
@@ -116,6 +116,7 @@ public class Databases {
 	}
 
 	public String getwordVI(String wordEN) {
+		initiAndConnectDB();
 		ResultSet rSet = getResult("SELECT DISTINCT wordVI FROM `dictionary`.`tb_dictionary`"
 				+ " WHERE wordEN='" + wordEN + "'");
 		try {

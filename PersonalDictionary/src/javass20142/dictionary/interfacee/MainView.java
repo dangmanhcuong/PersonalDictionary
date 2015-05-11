@@ -4,8 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javass20142.dictionary.database.Databases;
+import javass20142.dictionary.model.TranslateWord;
+
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,16 +22,21 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ListModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class MainView {
 
 	private JFrame frame;
-	private JTextField textField;
+	private JTextField wordSearch;
 	@SuppressWarnings("rawtypes")
-	private JList jList;
-	// String array test list
-	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	String[] fonts = ge.getAvailableFontFamilyNames();
+	private JList jListWordEN;
+	JTextPane txtWordVI;
+	TranslateWord translateWord = new TranslateWord();
+	Databases databases = new Databases();
+	String[] listWordEN = translateWord.getListWord().toArray(
+			new String[translateWord.getListWord().size()]);
 
 	// ////
 
@@ -73,10 +86,26 @@ public class MainView {
 		panel_1.setLayout(new BorderLayout());
 		panel_1.setBounds(57, 93, 178, 441);
 		frame.getContentPane().add(panel_1);
-		jList = new JList(fonts);
-		jList.getModel();
-		JScrollPane pane = new JScrollPane(jList);
-		pane.setHorizontalScrollBar(null);
+		jListWordEN = new JList(createDefaultListModel());
+		jListWordEN.getModel();
+		// ///////////////////////////
+		MouseListener mouseListener = new MouseAdapter() {
+			public void mouseClicked(MouseEvent mouseEvent) {
+				JList theList = (JList) mouseEvent.getSource();
+				if (mouseEvent.getClickCount() == 2) {
+					int index = theList.locationToIndex(mouseEvent.getPoint());
+					if (index >= 0) {
+						String wordEN = theList.getModel().getElementAt(index)
+								.toString();
+						txtWordVI.setText(databases.getwordVI(wordEN));
+						System.out.println("Double-clicked on: " + wordEN);
+					}
+				}
+			}
+		};
+		jListWordEN.addMouseListener(mouseListener);
+		JScrollPane pane = new JScrollPane(jListWordEN);
+		// pane.setHorizontalScrollBar(null);
 		panel_1.add(pane);
 
 		JPanel panel_2 = new JPanel();
@@ -84,14 +113,14 @@ public class MainView {
 		frame.getContentPane().add(panel_2);
 		panel_2.setLayout(null);
 
-		JTextPane txtpnHihi = new JTextPane();
-		txtpnHihi.setBounds(39, 29, 479, 375);
-		panel_2.add(txtpnHihi);
+		txtWordVI = new JTextPane();
+		txtWordVI.setBounds(39, 29, 479, 375);
+		panel_2.add(txtWordVI);
 
-		textField = new JTextField();
-		textField.setBounds(235, 54, 372, 28);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		wordSearch = createTextField();
+		wordSearch.setBounds(235, 54, 372, 28);
+		frame.getContentPane().add(wordSearch);
+		wordSearch.setColumns(10);
 
 		JLabel lblNewLabel = new JLabel("Word");
 		lblNewLabel.setBackground(Color.RED);
@@ -100,8 +129,62 @@ public class MainView {
 		frame.getContentPane().add(lblNewLabel);
 
 		JButton btnNewButton = new JButton("Translate");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				translateWord.translateWord(wordSearch, txtWordVI);
+			}
+		});
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnNewButton.setBounds(652, 54, 97, 23);
 		frame.getContentPane().add(btnNewButton);
+	}
+
+	private ListModel<String> createDefaultListModel() {
+		DefaultListModel<String> model = new DefaultListModel<>();
+		for (String s : listWordEN) {
+			model.addElement(s);
+		}
+		return model;
+	}
+
+	public void filterModel(DefaultListModel<String> model, String filter) {
+		for (String s : listWordEN) {
+			if (!s.startsWith(filter)) {
+				if (model.contains(s)) {
+					model.removeElement(s);
+				}
+			} else {
+				if (!model.contains(s)) {
+					model.addElement(s);
+				}
+			}
+		}
+	}
+
+	private JTextField createTextField() {
+		final JTextField wordSearch = new JTextField(15);
+		wordSearch.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				filter();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				filter();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+
+			@SuppressWarnings("unchecked")
+			private void filter() {
+				String filter = wordSearch.getText();
+				filterModel((DefaultListModel<String>) jListWordEN.getModel(),
+						filter);
+			}
+		});
+		return wordSearch;
 	}
 }
