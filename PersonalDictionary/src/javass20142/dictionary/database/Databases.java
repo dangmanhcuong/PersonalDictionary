@@ -141,7 +141,7 @@ public class Databases {
 	public ArrayList<String> getListWord() {
 		ArrayList<String> listWord = new ArrayList<String>();
 		initiAndConnectDB();
-		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`tbl_dictionary`");
+		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`tb_dictionary`");
 		try {
 			while (rSet.next()) {
 				listWord.add(rSet.getString("wordEN"));
