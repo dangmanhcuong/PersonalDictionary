@@ -28,20 +28,8 @@ public class TranslateWord {
 
 	}
 
-	public ArrayList<String> getListWord() {
-		Databases dbUtils = new Databases();
-		listWord = dbUtils.getListWordEN("tbl_translateev");
-		// try {
-		// //dbUtils.closeColection();
-		// } catch (SQLException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		return listWord;
-	}
-
 	public boolean checkWord(String wordEN) {
-		ArrayList<String> listWord = getListWord();
+		ArrayList<String> listWord = databases.getListWordEN("tbl_translateev");
 		for (int i = 0; i < listWord.size(); i++) {
 			// wordEN.
 			if (wordEN.equalsIgnoreCase(listWord.get(i)))
@@ -63,5 +51,4 @@ public class TranslateWord {
 		}
 		return result;
 	}
-
 }

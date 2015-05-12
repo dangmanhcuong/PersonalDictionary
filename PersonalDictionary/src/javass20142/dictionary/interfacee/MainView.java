@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Calendar;
 
 import javass20142.dictionary.database.Databases;
 import javass20142.dictionary.model.TranslateWord;
@@ -22,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.ListModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -30,16 +30,18 @@ public class MainView {
 
 	private JFrame frame;
 	private JTextField wordSearch;
-	@SuppressWarnings("rawtypes")
-	private JList jListWordEN;
+	private JList<String> jListWordEN = null;
 	JTextPane txtWordVI;
-	DefaultListModel<String> jlistmodel = new DefaultListModel<>();
+	// DefaultListModel<String> jlistmodel = new DefaultListModel<>();
 	TranslateWord translateWord = new TranslateWord();
 	Databases databases = new Databases();
-	String[] listWordEN = translateWord.getListWord().toArray(
-			new String[translateWord.getListWord().size()]);
+	// long c = Calendar.getInstance().getTimeInMillis();
+	int numWord = databases.getListWordEN("tbl_translateev").size();
+	String[] listWordEN = databases.getListWordEN("tbl_translateev").toArray(
+			new String[numWord]);
 
-	// ////
+	// c = Calendar.getInstance().getTimeInMillis() - c;
+	// System.out.println("thoi gian load tu 2 la(s):" + c);
 
 	/**
 	 * Launch the application.
@@ -87,30 +89,16 @@ public class MainView {
 		panel_1.setLayout(new BorderLayout());
 		panel_1.setBounds(57, 93, 178, 441);
 		frame.getContentPane().add(panel_1);
-		// jListWordEN = new JList();
-		// jListWordEN.getModel();
-		// jListWordEN = new JList(createDefaultListModel());jlistmodel
-		jListWordEN = new JList(jlistmodel);
-		jListWordEN.getModel();
-		// /////////////////////////
-		MouseListener mouseListener = new MouseAdapter() {
-			public void mouseClicked(MouseEvent mouseEvent) {
-				JList theList = (JList) mouseEvent.getSource();
-				if (mouseEvent.getClickCount() == 2) {
-					int index = theList.locationToIndex(mouseEvent.getPoint());
-					if (index >= 0) {
-						String wordEN = theList.getModel().getElementAt(index)
-								.toString();
-						txtWordVI.setText(databases.getwordVI(
-								"tbl_translateev", wordEN));
-						System.out.println("Double-clicked on: " + wordEN);
-					}
-				}
-			}
-		};
-		jListWordEN.addMouseListener(mouseListener);
+		// //
+		long c = Calendar.getInstance().getTimeInMillis();
+		jListWordEN = new JList(createDefaultListModel());
+		c = Calendar.getInstance().getTimeInMillis() - c;
+		System.out.println("thoi gian load tu 1 la(s):" + c);
+		c = Calendar.getInstance().getTimeInMillis();
+		clickListioner();
+		c = Calendar.getInstance().getTimeInMillis() - c;
+		System.out.println("thoi gian load tu 2 la(s):" + c);
 		JScrollPane pane = new JScrollPane(jListWordEN);
-		// pane.setHorizontalScrollBar(null);
 		panel_1.add(pane);
 
 		JPanel panel_2 = new JPanel();
@@ -123,11 +111,9 @@ public class MainView {
 		panel_2.add(txtWordVI);
 
 		JLabel numberWord = new JLabel("New label");
-		int aString = translateWord.getListWord().size();
-		numberWord.setText("Số từ:   " + aString);
+		numberWord.setText("Số từ:   " + numWord);
 		numberWord.setBounds(61, 11, 200, 14);
 		panel_2.add(numberWord);
-		// wordSearch = new JTextField();
 
 		wordSearch = createTextField();
 		wordSearch.setBounds(235, 54, 372, 28);
@@ -151,16 +137,18 @@ public class MainView {
 		frame.getContentPane().add(btnNewButton);
 	}
 
-	private ListModel<String> createDefaultListModel() {
+	private DefaultListModel<String> createDefaultListModel() {
 		DefaultListModel<String> model = new DefaultListModel<>();
-		for (String s : listWordEN) {
+		for (String s : databases.getListWordEN("tbl_translateev")) {
 			model.addElement(s);
 		}
 		return model;
 	}
 
 	public void filterModel(DefaultListModel<String> model, String filter) {
+		long c = Calendar.getInstance().getTimeInMillis();
 		for (String s : listWordEN) {
+
 			if (!s.startsWith(filter)) {
 				if (model.contains(s)) {
 					model.removeElement(s);
@@ -171,11 +159,8 @@ public class MainView {
 				}
 			}
 		}
-		// jlistmodel = null;
-		// for (int i = 0; i < 20; i++) {
-		// jlistmodel.addElement(model.getElementAt(i));
-		//
-		// }
+		c = Calendar.getInstance().getTimeInMillis() - c;
+		System.out.println("tg filter" + c);
 	}
 
 	private JTextField createTextField() {
@@ -193,16 +178,37 @@ public class MainView {
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
+				filter();
 			}
 
-			@SuppressWarnings("unchecked")
 			private void filter() {
 				String filter = wordSearch.getText();
 				filterModel((DefaultListModel<String>) jListWordEN.getModel(),
 						filter);
 			}
-
 		});
 		return wordSearch;
+	}
+
+	public void clickListioner() {
+		MouseListener mouseListener = new MouseAdapter() {
+			public void mouseClicked(MouseEvent mouseEvent) {
+				JList<?> theList = (JList<?>) mouseEvent.getSource();
+				if (mouseEvent.getClickCount() == 1) {
+					int index = theList.locationToIndex(mouseEvent.getPoint());
+					if (index >= 0) {
+						String wordEN = theList.getModel().getElementAt(index)
+								.toString();
+						wordSearch.setText(wordEN);
+						txtWordVI.setText(databases.getwordVI(
+								"tbl_translateev", wordEN));
+						// System.out.println("clicked on: " + wordEN);
+					} else {
+						System.out.println("null");
+					}
+				}
+			}
+		};
+		jListWordEN.addMouseListener(mouseListener);
 	}
 }

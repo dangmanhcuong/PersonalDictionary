@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import javax.swing.DefaultListModel;
+
 public class Databases {
 	private String url;
 	private String user;
@@ -139,5 +141,44 @@ public class Databases {
 		}
 		return null;
 
+	}
+
+	public void filterWord(String tblName, String stringFilter) {
+		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
+				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter + "%'");
+		try {
+			while (rSet.next()) {
+				String aString = rSet.getString("wordEN");
+				System.out.println(aString);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public DefaultListModel<String> filterWord2(String tblName,
+			String stringFilter) {
+		initiAndConnectDB();
+		// ArrayList<String> arrayList = new ArrayList<>();
+		DefaultListModel<String> aDefaultListModel = new DefaultListModel<>();
+		// String[] aStrings=
+		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
+				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter + "%'");
+		try {
+			while (rSet.next()) {
+				String aString = rSet.getString("wordEN");
+				// System.out.println(aString);
+				aDefaultListModel.addElement(aString);
+				// arrayList.add(aString);
+			}
+			return aDefaultListModel;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
