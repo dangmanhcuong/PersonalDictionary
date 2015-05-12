@@ -33,6 +33,7 @@ public class MainView {
 	@SuppressWarnings("rawtypes")
 	private JList jListWordEN;
 	JTextPane txtWordVI;
+	DefaultListModel<String> jlistmodel = new DefaultListModel<>();
 	TranslateWord translateWord = new TranslateWord();
 	Databases databases = new Databases();
 	String[] listWordEN = translateWord.getListWord().toArray(
@@ -86,9 +87,12 @@ public class MainView {
 		panel_1.setLayout(new BorderLayout());
 		panel_1.setBounds(57, 93, 178, 441);
 		frame.getContentPane().add(panel_1);
-		jListWordEN = new JList(createDefaultListModel());
+		// jListWordEN = new JList();
+		// jListWordEN.getModel();
+		// jListWordEN = new JList(createDefaultListModel());jlistmodel
+		jListWordEN = new JList(jlistmodel);
 		jListWordEN.getModel();
-		// ///////////////////////////
+		// /////////////////////////
 		MouseListener mouseListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent mouseEvent) {
 				JList theList = (JList) mouseEvent.getSource();
@@ -97,7 +101,8 @@ public class MainView {
 					if (index >= 0) {
 						String wordEN = theList.getModel().getElementAt(index)
 								.toString();
-						txtWordVI.setText(databases.getwordVI(wordEN));
+						txtWordVI.setText(databases.getwordVI(
+								"tbl_translateev", wordEN));
 						System.out.println("Double-clicked on: " + wordEN);
 					}
 				}
@@ -114,8 +119,15 @@ public class MainView {
 		panel_2.setLayout(null);
 
 		txtWordVI = new JTextPane();
-		txtWordVI.setBounds(39, 29, 479, 375);
+		txtWordVI.setBounds(10, 36, 479, 375);
 		panel_2.add(txtWordVI);
+
+		JLabel numberWord = new JLabel("New label");
+		int aString = translateWord.getListWord().size();
+		numberWord.setText("Số từ:   " + aString);
+		numberWord.setBounds(61, 11, 200, 14);
+		panel_2.add(numberWord);
+		// wordSearch = new JTextField();
 
 		wordSearch = createTextField();
 		wordSearch.setBounds(235, 54, 372, 28);
@@ -159,6 +171,11 @@ public class MainView {
 				}
 			}
 		}
+		// jlistmodel = null;
+		// for (int i = 0; i < 20; i++) {
+		// jlistmodel.addElement(model.getElementAt(i));
+		//
+		// }
 	}
 
 	private JTextField createTextField() {
@@ -184,6 +201,7 @@ public class MainView {
 				filterModel((DefaultListModel<String>) jListWordEN.getModel(),
 						filter);
 			}
+
 		});
 		return wordSearch;
 	}

@@ -1,6 +1,5 @@
 package javass20142.dictionary.model;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javass20142.dictionary.database.Databases;
@@ -18,7 +17,8 @@ public class TranslateWord {
 	public void translateWord(JTextField wordSearch, JTextPane txtWordVI) {
 		String wordsearch = wordSearch.getText();
 		if (checkWord(wordsearch)) {
-			txtWordVI.setText(databases.getwordVI(wordsearch));
+			txtWordVI.setText(databases
+					.getwordVI("tbl_translateev", wordsearch));
 
 		} else {
 			txtWordVI
@@ -30,19 +30,20 @@ public class TranslateWord {
 
 	public ArrayList<String> getListWord() {
 		Databases dbUtils = new Databases();
-		listWord = dbUtils.getListWordEN();
-		try {
-			dbUtils.closeColection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		listWord = dbUtils.getListWordEN("tbl_translateev");
+		// try {
+		// //dbUtils.closeColection();
+		// } catch (SQLException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 		return listWord;
 	}
 
 	public boolean checkWord(String wordEN) {
 		ArrayList<String> listWord = getListWord();
 		for (int i = 0; i < listWord.size(); i++) {
+			// wordEN.
 			if (wordEN.equalsIgnoreCase(listWord.get(i)))
 				return true;
 		}

@@ -46,9 +46,9 @@ public class Databases {
 			e.printStackTrace();
 		}
 		// test connections in console
-		System.out.println(url);
-		System.out.println(user + "   :  " + password);
-		System.out.println("successful connections...");
+		// System.out.println(url);
+		// System.out.println(user + "   :  " + password);
+		// System.out.println("successful connections...");
 	}
 
 	// make the statement to interact with databases
@@ -58,7 +58,7 @@ public class Databases {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("successful create Statement...");
+		// System.out.println("successful create Statement...");
 	}
 
 	public ResultSet getResult(String sqlcmd) {
@@ -71,10 +71,11 @@ public class Databases {
 		}
 	}
 
-	public ArrayList<String> getListWordEN() {
+	public ArrayList<String> getListWordEN(String tblName) {
 		ArrayList<String> listWord = new ArrayList<String>();
 		initiAndConnectDB();
-		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`tb_dictionary`");
+		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
+				+ tblName + "`");
 		try {
 			while (rSet.next()) {
 				listWord.add(rSet.getString("wordEN"));
@@ -95,7 +96,7 @@ public class Databases {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("successful update Data...");
+		// System.out.println("successful update Data...");
 	}
 
 	public void closeColection() throws SQLException {
@@ -115,10 +116,19 @@ public class Databases {
 
 	}
 
-	public String getwordVI(String wordEN) {
+	public void insertDB2(String dbName, String wordEN, String wordVI) {
+		String sql = "INSERT INTO `dictionary`.`" + dbName
+				+ "` (`wordEN`, `wordVI`) VALUES ('" + wordEN + "', '" + wordVI
+				+ "')";
+		upDateData(sql);
+		// System.out.println("Inserted records into the table...");
+
+	}
+
+	public String getwordVI(String tblName, String wordEN) {
 		initiAndConnectDB();
-		ResultSet rSet = getResult("SELECT DISTINCT wordVI FROM `dictionary`.`tb_dictionary`"
-				+ " WHERE wordEN='" + wordEN + "'");
+		ResultSet rSet = getResult("SELECT DISTINCT wordVI FROM `dictionary`.`"
+				+ tblName + "`" + " WHERE wordEN='" + wordEN + "'");
 		try {
 			while (rSet.next()) {
 				return rSet.getString("wordVI");
