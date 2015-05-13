@@ -73,14 +73,14 @@ public class Databases {
 		}
 	}
 
-	public ArrayList<String> getListWordEN(String tblName) {
+	public ArrayList<String> getListWordEN(String tblName, String colName) {
 		ArrayList<String> listWord = new ArrayList<String>();
 		initiAndConnectDB();
-		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
+		ResultSet rSet = getResult("SELECT " + colName + " FROM `dictionary`.`"
 				+ tblName + "`");
 		try {
 			while (rSet.next()) {
-				listWord.add(rSet.getString("wordEN"));
+				listWord.add(rSet.getString(colName));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -162,19 +162,35 @@ public class Databases {
 	public DefaultListModel<String> filterWord2(String tblName,
 			String stringFilter) {
 		initiAndConnectDB();
-		// ArrayList<String> arrayList = new ArrayList<>();
 		DefaultListModel<String> aDefaultListModel = new DefaultListModel<>();
-		// String[] aStrings=
 		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
-				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter + "%'");
+				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter
+				+ "%' LIMIT 10");
 		try {
 			while (rSet.next()) {
 				String aString = rSet.getString("wordEN");
-				// System.out.println(aString);
 				aDefaultListModel.addElement(aString);
-				// arrayList.add(aString);
 			}
 			return aDefaultListModel;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public ArrayList<String> filterWord2l(String tblName, String stringFilter) {
+		initiAndConnectDB();
+		ArrayList<String> arrayList = new ArrayList<>();
+		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
+				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter
+				+ "%' LIMIT 50");
+		try {
+			while (rSet.next()) {
+				String aString = rSet.getString("wordEN");
+				arrayList.add(aString);
+			}
+			return arrayList;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

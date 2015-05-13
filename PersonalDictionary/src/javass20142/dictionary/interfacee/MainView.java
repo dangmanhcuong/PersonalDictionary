@@ -35,13 +35,12 @@ public class MainView {
 	// DefaultListModel<String> jlistmodel = new DefaultListModel<>();
 	TranslateWord translateWord = new TranslateWord();
 	Databases databases = new Databases();
-	// long c = Calendar.getInstance().getTimeInMillis();
-	int numWord = databases.getListWordEN("tbl_translateev").size();
-	String[] listWordEN = databases.getListWordEN("tbl_translateev").toArray(
-			new String[numWord]);
+	int numWord;
+	String[] listWordEN;
 
-	// c = Calendar.getInstance().getTimeInMillis() - c;
-	// System.out.println("thoi gian load tu 2 la(s):" + c);
+	// int numWord = databases.getListWordEN("tbl_translateev").size();
+	// String[] listWordEN = databases.getListWordEN("tbl_translateev").toArray(
+	// new String[numWord]);
 
 	/**
 	 * Launch the application.
@@ -63,7 +62,15 @@ public class MainView {
 	 * Create the application.
 	 */
 	public MainView() {
+		long cs = Calendar.getInstance().getTimeInMillis();
+		//numWord = databases.getListWordEN("tbl_translateev", "wordEN").size();
+		// listWordEN = databases.getListWordEN("tbl_translateev", "wordEN")
+		// .toArray(new String[numWord]);
+		cs = Calendar.getInstance().getTimeInMillis() - cs;
+		System.out.println("run initi:" + cs);
+
 		initialize();
+
 	}
 
 	/**
@@ -139,7 +146,13 @@ public class MainView {
 
 	private DefaultListModel<String> createDefaultListModel() {
 		DefaultListModel<String> model = new DefaultListModel<>();
-		for (String s : databases.getListWordEN("tbl_translateev")) {
+		// for (String s : databases.getListWordEN("tbl_translateev", "wordEN"))
+		// {
+		// model.addElement(s);
+		// }
+		for (String s : databases.filterWord2l("tbl_translateev", "a").toArray(
+				new String[databases.filterWord2l("tbl_translateev", "a")
+						.size()])) {
 			model.addElement(s);
 		}
 		return model;
@@ -147,24 +160,52 @@ public class MainView {
 
 	public void filterModel(DefaultListModel<String> model, String filter) {
 		long c = Calendar.getInstance().getTimeInMillis();
-		for (String s : listWordEN) {
+		// for (String s : listWordEN) {
+		// long ac = Calendar.getInstance().getTimeInMillis();
+		// if (!s.startsWith(filter)) {
+		// if (model.contains(s)) {
+		// model.removeElement(s);
+		// }
+		// } else {
+		// if (!model.contains(s)) {
+		// model.addElement(s);
+		// }
+		// }
+		// ac = Calendar.getInstance().getTimeInMillis() - ac;
+		// System.out.println("tg filter : " + ac);
+		// }
+		// for (String s : listWordEN) {
+		// long ac = Calendar.getInstance().getTimeInMillis();
+		// model.clear();
+		// if (!s.startsWith(filter)) {
+		// model.addElement(s);
+		//
+		// }
+		// ac = Calendar.getInstance().getTimeInMillis() - ac;
+		// System.out.println("tg filter : " + ac);
+		// }
+		// model.removeAllElements();
+		model.clear();
+		DefaultListModel<String> model2 = databases.filterWord2(
+				"tbl_translateev", filter);
 
-			if (!s.startsWith(filter)) {
-				if (model.contains(s)) {
-					model.removeElement(s);
-				}
-			} else {
-				if (!model.contains(s)) {
-					model.addElement(s);
-				}
-			}
+		// if (model2.size() > 5) {
+		// for (int i = 0; i < 5; i++) {
+		// model.addElement(databases.filterWord2("tbl_translateev",
+		// filter).getElementAt(i));
+		// }
+		// } else {
+		for (int i = 0; i < model2.size(); i++) {
+			model.addElement(databases.filterWord2("tbl_translateev", filter)
+					.getElementAt(i));
 		}
+		// }
 		c = Calendar.getInstance().getTimeInMillis() - c;
-		System.out.println("tg filter" + c);
+		System.out.println("tg filter toan bo: " + c);
 	}
 
 	private JTextField createTextField() {
-		final JTextField wordSearch = new JTextField(15);
+		final JTextField wordSearch = new JTextField(50);
 		wordSearch.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -178,13 +219,18 @@ public class MainView {
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				filter();
+				// filter();
 			}
 
 			private void filter() {
 				String filter = wordSearch.getText();
+				if (filter.equals(null)) {
+
+				}
 				filterModel((DefaultListModel<String>) jListWordEN.getModel(),
 						filter);
+				// jListWordEN.setModel(databases.filterWord2("tbl_translateev",
+				// filter));
 			}
 		});
 		return wordSearch;
@@ -199,7 +245,7 @@ public class MainView {
 					if (index >= 0) {
 						String wordEN = theList.getModel().getElementAt(index)
 								.toString();
-						wordSearch.setText(wordEN);
+						// wordSearch.setText(wordEN);
 						txtWordVI.setText(databases.getwordVI(
 								"tbl_translateev", wordEN));
 						// System.out.println("clicked on: " + wordEN);

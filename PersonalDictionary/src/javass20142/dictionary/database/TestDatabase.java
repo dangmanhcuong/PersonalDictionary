@@ -18,7 +18,7 @@ public class TestDatabase {
 		// }
 		// testDbUtils.insertDB("hi", "fsdf");
 		// System.out.println(testDbUtils.getwordVI("testdata", "a few"));
-		testDbUtils.filterWord("tbl_translateev", "abc");
+		testDbUtils.filterWord("tbl_translateev", "a");
 		testDbUtils.closeColection();
 
 	}

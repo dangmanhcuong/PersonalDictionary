@@ -29,7 +29,7 @@ public class TranslateWord {
 	}
 
 	public boolean checkWord(String wordEN) {
-		ArrayList<String> listWord = databases.getListWordEN("tbl_translateev");
+		ArrayList<String> listWord = databases.getListWordEN("tbl_translateev","wordEN");
 		for (int i = 0; i < listWord.size(); i++) {
 			// wordEN.
 			if (wordEN.equalsIgnoreCase(listWord.get(i)))
