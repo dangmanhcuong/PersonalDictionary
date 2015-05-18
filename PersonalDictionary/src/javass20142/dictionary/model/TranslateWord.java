@@ -11,9 +11,6 @@ public class TranslateWord {
 	ArrayList<String> listWord = new ArrayList<String>();
 	Databases databases = new Databases();
 
-	// private JTextField wordSearch;
-	// private JList jListWordEN;
-	// private JTextPane txtWordVI;
 	public void translateWord(JTextField wordSearch, JTextPane txtWordVI) {
 		String wordsearch = wordSearch.getText();
 		if (checkWord(wordsearch)) {
@@ -25,18 +22,20 @@ public class TranslateWord {
 					.setText("word is not in the database enter or misspelled");
 
 		}
-
 	}
 
 	public boolean checkWord(String wordEN) {
-		ArrayList<String> listWord = databases.getListWordEN("tbl_word"
-				+ wordEN.charAt(0), "wordEN");
-		for (int i = 0; i < listWord.size(); i++) {
-			// wordEN.
-			if (wordEN.equalsIgnoreCase(listWord.get(i)))
-				return true;
+		if (wordEN.equals("")==false) {
+			ArrayList<String> listWord = databases.getListWordEN("tbl_word"
+					+ wordEN.charAt(0), "wordEN");
+			for (int i = 0; i < listWord.size(); i++) {
+				if (wordEN.equalsIgnoreCase(listWord.get(i)))
+					return true;
+			}
+			return false;
+		} else {
+			return false;
 		}
-		return false;
 
 	}
 

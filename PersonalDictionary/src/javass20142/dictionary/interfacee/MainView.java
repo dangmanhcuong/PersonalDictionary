@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,10 +17,14 @@ import javass20142.dictionary.database.Databases;
 import javass20142.dictionary.model.TranslateWord;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -36,6 +42,15 @@ public class MainView {
 	Databases databases = new Databases();
 	int numWord;
 	String[] listWordEN;
+	
+
+	public JTextField getWordSearch() {
+		return wordSearch;
+	}
+
+	public JTextPane getTxtWordVI() {
+		return txtWordVI;
+	}
 
 	/**
 	 * Launch the application.
@@ -81,9 +96,59 @@ public class MainView {
 		frame.getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel();
+		// panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel.setBackground(Color.LIGHT_GRAY);
 		panel.setBounds(0, 0, 794, 43);
 		frame.getContentPane().add(panel);
+
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Menu");
+		menu.setIcon(new ImageIcon(
+				MainView.class
+						.getResource("/com/sun/java/swing/plaf/windows/icons/ListView.gif")));
+		menu.setBackground(Color.RED);
+		menu.setMnemonic(KeyEvent.VK_F);
+		JMenuItem close = new JMenuItem(
+				"Close",
+				new ImageIcon(
+						MainView.class
+								.getResource("/javax/swing/plaf/metal/icons/ocean/close-pressed.gif")));
+		close.setMnemonic(KeyEvent.VK_C);
+		close.setToolTipText("Exit application");
+		close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				System.exit(0);
+			}
+		});
+		// panel.setLayout(new BorderLayout(0, 0));
+		menu.add(close);
+		menuBar.add(menu);
+		JMenuBar menuBar_1 = new JMenuBar();
+		JMenu myWord = new JMenu("My Word");
+		myWord.setBackground(Color.RED);
+		myWord.setMnemonic(KeyEvent.VK_F);
+		myWord.setSize(10, 20);
+		menuBar_1.add(myWord);
+
+		JMenuBar menuBar_12 = new JMenuBar();
+		JMenu about = new JMenu("About");
+		about.setBackground(Color.RED);
+		about.setMnemonic(KeyEvent.VK_F);
+		about.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("sfdfdf");
+				System.exit(0);
+			}
+		});
+		menuBar_12.add(about);
+		panel.setLayout(new GridLayout(0, 3, 0, 0));
+		panel.add(menuBar);
+		panel.add(menuBar_1);
+		panel.add(menuBar_12);
+		// panel.add(menuBar);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.CYAN);
@@ -106,7 +171,7 @@ public class MainView {
 		panel_1.add(pane);
 
 		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(235, 93, 559, 441);
+		panel_2.setBounds(245, 93, 559, 441);
 		frame.getContentPane().add(panel_2);
 		panel_2.setLayout(null);
 
@@ -114,10 +179,41 @@ public class MainView {
 		txtWordVI.setBounds(10, 36, 479, 375);
 		panel_2.add(txtWordVI);
 
-		JLabel numberWord = new JLabel("New label");
-		numberWord.setText("Số từ:   " + numWord);
-		numberWord.setBounds(61, 11, 200, 14);
-		panel_2.add(numberWord);
+		JButton btnNewButton_1 = new JButton("Speak");
+		btnNewButton_1.setFont(new Font("Times New Roman", Font.BOLD
+				| Font.ITALIC, 11));
+		btnNewButton_1.setBounds(27, 0, 89, 23);
+		panel_2.add(btnNewButton_1);
+
+		JButton btnNewButton_2 = new JButton("Edit");
+		btnNewButton_2.setFont(new Font("Times New Roman", Font.BOLD
+				| Font.ITALIC, 11));
+		btnNewButton_2.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent arg0) {
+				EditButton about = new EditButton();
+				about.show();
+				//about.createFrame();
+			}
+		});
+		btnNewButton_2.setBounds(132, 0, 89, 23);
+		panel_2.add(btnNewButton_2);
+
+		JButton btnNewButton_3 = new JButton(" Add Word");
+		btnNewButton_3.setFont(new Font("Times New Roman", Font.BOLD
+				| Font.ITALIC, 11));
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+			}
+		});
+		btnNewButton_3.setBounds(235, 0, 89, 23);
+		panel_2.add(btnNewButton_3);
+		
+		JButton btnDeleteWord = new JButton("Delete Word");
+		btnDeleteWord.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 11));
+		btnDeleteWord.setBounds(344, 0, 99, 23);
+		panel_2.add(btnDeleteWord);
 
 		wordSearch = createTextField();
 		wordSearch.setBounds(235, 54, 372, 28);
