@@ -7,7 +7,7 @@ public class TestDatabase {
 	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 		Databases testDbUtils = new Databases();
-		testDbUtils.initiAndConnectDB();
+		// testDbUtils.initiAndConnectDB();
 		// testDbUtils.initiAndConnectDB();
 		// testDbUtils
 		// .upDateData("UPDATE `dictionary`.`tb_dictionary` SET `wordVI`=' không  gì' WHERE `wordID`='7'");
@@ -18,7 +18,8 @@ public class TestDatabase {
 		// }
 		// testDbUtils.insertDB("hi", "fsdf");
 		// System.out.println(testDbUtils.getwordVI("testdata", "a few"));
-		testDbUtils.filterWord("tbl_translateev", "a");
+		// testDbUtils.filterWord("tbl_translateev", "a");
+		// ArrayList<String> arrayList =testDbUtils.filterWord2l("a", "a");
 		testDbUtils.closeColection();
 
 	}

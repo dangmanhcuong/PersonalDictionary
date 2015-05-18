@@ -17,8 +17,8 @@ public class TranslateWord {
 	public void translateWord(JTextField wordSearch, JTextPane txtWordVI) {
 		String wordsearch = wordSearch.getText();
 		if (checkWord(wordsearch)) {
-			txtWordVI.setText(databases
-					.getwordVI("tbl_translateev", wordsearch));
+			txtWordVI.setText(databases.getwordVI(
+					"tbl_word" + wordsearch.charAt(0), wordsearch));
 
 		} else {
 			txtWordVI
@@ -29,7 +29,8 @@ public class TranslateWord {
 	}
 
 	public boolean checkWord(String wordEN) {
-		ArrayList<String> listWord = databases.getListWordEN("tbl_translateev","wordEN");
+		ArrayList<String> listWord = databases.getListWordEN("tbl_word"
+				+ wordEN.charAt(0), "wordEN");
 		for (int i = 0; i < listWord.size(); i++) {
 			// wordEN.
 			if (wordEN.equalsIgnoreCase(listWord.get(i)))

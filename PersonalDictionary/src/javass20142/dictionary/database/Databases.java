@@ -163,9 +163,9 @@ public class Databases {
 			String stringFilter) {
 		initiAndConnectDB();
 		DefaultListModel<String> aDefaultListModel = new DefaultListModel<>();
-		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
+		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`tbl_word"
 				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter
-				+ "%' LIMIT 10");
+				+ "%' LIMIT 50");
 		try {
 			while (rSet.next()) {
 				String aString = rSet.getString("wordEN");
@@ -182,7 +182,7 @@ public class Databases {
 	public ArrayList<String> filterWord2l(String tblName, String stringFilter) {
 		initiAndConnectDB();
 		ArrayList<String> arrayList = new ArrayList<>();
-		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
+		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`tbl_word"
 				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter
 				+ "%' LIMIT 50");
 		try {

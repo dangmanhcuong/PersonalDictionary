@@ -14,31 +14,52 @@ public class UpDateDatabase {
 		iDatabase.readFile();
 	}
 
-	public void readFile() {
+	public void readFile()
+			throws com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException {
 		Databases Data = new Databases();
 		Data.initiAndConnectDB();
+		// Path srcFile = Paths
+		// .get("F:\\Dictionary\\voice\\stardict editor\\en_vi.txt");
 		Path srcFile = Paths
-				.get("F:\\Dictionary\\voice\\stardict editor\\en_vi.txt");
+				.get("F:\\Dictionary\\voice\\stardict editor\\en_vii.txt");
 		Charset cs = Charset.forName("UTF-8");
 		try (BufferedReader reader = Files.newBufferedReader(srcFile, cs)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				int i = line.indexOf("@");
-				// int j = line.indexOf("\t");
-				if (i != -1) {
-					String wordEN = line.substring(0, i).trim();
-					String wordVI = line.substring(i + 1, line.length()).trim();
-					String bString = wordVI.replace("\\n", "\n");
-					Data.insertDB2("tbl_translateev", wordEN, bString);
-				} else {
-					System.out.println(line);
-				}
-
-				// System.out.print(wordEN);
-				// System.out.println(wordVI);
+				// String lINEString = line.to
+				writeData(line, Data);
 			}
 		} catch (IOException e) {
 			System.err.format("IOException: %s%n", e);
+		}
+	}
+
+	public void writeData(String line, Databases Data) {
+		int cs1 = line.indexOf("@");
+		if (cs1 != -1) {
+			line = line.replace("'", "");
+			String wordEN = line.substring(0, cs1).trim().toLowerCase();
+			String wordVI = line.substring(cs1 + 1, line.length()).trim()
+					.replace("\\n", "\n");
+			char c = wordEN.charAt(0);
+			if ((c >= 97) && (c <= 122)) {
+				Data.insertDB2("tbl_word" + line.charAt(0), wordEN, wordVI);
+			} else {
+				Data.insertDB2("tbl_wordother", wordEN, wordVI);
+			}
+
+		} else {
+			int cs2 = line.indexOf("\t");
+			line = line.replace("'", "");
+			String wordEN = line.substring(0, cs2).trim();
+			String wordVI = line.substring(cs2 + 1, line.length()).trim()
+					.replace("\\n", "\n");
+			char c = wordEN.charAt(0);
+			if ((c >= 97) && (c <= 122)) {
+				Data.insertDB2("tbl_word" + line.charAt(0), wordEN, wordVI);
+			} else {
+				Data.insertDB2("tbl_wordother", wordEN, wordVI);
+			}
 		}
 	}
 }
