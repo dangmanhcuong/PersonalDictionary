@@ -119,12 +119,37 @@ public class Databases {
 	}
 
 	public void insertDB2(String dbName, String wordEN, String wordVI) {
-		String sql = "INSERT INTO `dictionary`.`" + dbName
+		String sql = "INSERT INTO `dictionary`.`tbl_word" + dbName
 				+ "` (`wordEN`, `wordVI`) VALUES ('" + wordEN + "', '" + wordVI
 				+ "')";
+		System.out.println(sql);
 		upDateData(sql);
 		// System.out.println("Inserted records into the table...");
 
+	}
+
+	public int getWordID(String wordEN) {
+		initiAndConnectDB();
+		ResultSet rSet = getResult("SELECT DISTINCT wordID FROM `dictionary`.`tbl_word"
+				+ wordEN.charAt(0) + "`" + " WHERE wordEN='" + wordEN + "'");
+		try {
+			while (rSet.next()) {
+				return rSet.getInt("wordID");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+
+	}
+
+	public void upDateDB(int wordID, String wordEN, String wordVI) {
+		String sql = "UPDATE `dictionary`.`tbl_word" + wordEN.charAt(0) + "`"
+				+ " SET `wordEN` ='" + wordEN + "', `wordVI`='" + wordVI
+				+ "' WHERE `wordID`='" + wordID + "'";
+		// System.out.println(sql);
+		upDateData(sql);
 	}
 
 	public String getwordVI(String tblName, String wordEN) {

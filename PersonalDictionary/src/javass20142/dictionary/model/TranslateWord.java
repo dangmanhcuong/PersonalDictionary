@@ -25,7 +25,7 @@ public class TranslateWord {
 	}
 
 	public boolean checkWord(String wordEN) {
-		if (wordEN.equals("")==false) {
+		if (wordEN.equals("") == false) {
 			ArrayList<String> listWord = databases.getListWordEN("tbl_word"
 					+ wordEN.charAt(0), "wordEN");
 			for (int i = 0; i < listWord.size(); i++) {
@@ -36,19 +36,5 @@ public class TranslateWord {
 		} else {
 			return false;
 		}
-
-	}
-
-	public ArrayList<String> searchWord2(String wordString,
-			ArrayList<String> listWord) {
-		ArrayList<String> result = new ArrayList<String>();
-		for (int i = 0; i < listWord.size(); i++) {
-			if (wordString.length() < listWord.get(i).length())
-				if (wordString.equalsIgnoreCase(listWord.get(i).substring(0,
-						wordString.length()))) {
-					result.add(listWord.get(i));
-				}
-		}
-		return result;
 	}
 }

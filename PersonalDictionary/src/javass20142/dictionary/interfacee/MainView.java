@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.Calendar;
 
 import javass20142.dictionary.database.Databases;
@@ -38,18 +39,14 @@ public class MainView {
 	private JTextField wordSearch;
 	private JList<String> jListWordEN = null;
 	JTextPane txtWordVI;
+	private static String wordEdit = "";
 	TranslateWord translateWord = new TranslateWord();
 	Databases databases = new Databases();
 	int numWord;
 	String[] listWordEN;
-	
 
-	public JTextField getWordSearch() {
-		return wordSearch;
-	}
-
-	public JTextPane getTxtWordVI() {
-		return txtWordVI;
+	public static String getwordEdit() {
+		return wordEdit;
 	}
 
 	/**
@@ -179,21 +176,21 @@ public class MainView {
 		txtWordVI.setBounds(10, 36, 479, 375);
 		panel_2.add(txtWordVI);
 
-		JButton btnNewButton_1 = new JButton("Speak");
-		btnNewButton_1.setFont(new Font("Times New Roman", Font.BOLD
-				| Font.ITALIC, 11));
-		btnNewButton_1.setBounds(27, 0, 89, 23);
-		panel_2.add(btnNewButton_1);
-
 		JButton btnNewButton_2 = new JButton("Edit");
 		btnNewButton_2.setFont(new Font("Times New Roman", Font.BOLD
 				| Font.ITALIC, 11));
 		btnNewButton_2.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
-				EditButton about = new EditButton();
-				about.show();
-				//about.createFrame();
+				EditButton btEditButton = null;
+				try {
+					btEditButton = new EditButton();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				btEditButton.show();
+				// about.createFrame();
 			}
 		});
 		btnNewButton_2.setBounds(132, 0, 89, 23);
@@ -203,17 +200,14 @@ public class MainView {
 		btnNewButton_3.setFont(new Font("Times New Roman", Font.BOLD
 				| Font.ITALIC, 11));
 		btnNewButton_3.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
-
+				AddButton btAddButton = new AddButton();
+				btAddButton.show();
 			}
 		});
 		btnNewButton_3.setBounds(235, 0, 89, 23);
 		panel_2.add(btnNewButton_3);
-		
-		JButton btnDeleteWord = new JButton("Delete Word");
-		btnDeleteWord.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 11));
-		btnDeleteWord.setBounds(344, 0, 99, 23);
-		panel_2.add(btnDeleteWord);
 
 		wordSearch = createTextField();
 		wordSearch.setBounds(235, 54, 372, 28);
@@ -321,6 +315,7 @@ public class MainView {
 					if (index >= 0) {
 						String wordEN = theList.getModel().getElementAt(index)
 								.toString();
+						wordEdit = wordEN;
 						// wordSearch.setText(wordEN);
 						txtWordVI.setText(databases.getwordVI("tbl_word"
 								+ wordEN.charAt(0), wordEN));
