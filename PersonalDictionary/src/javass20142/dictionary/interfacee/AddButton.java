@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javass20142.dictionary.database.Databases;
+import javass20142.dictionary.model.TranslateWord;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -24,6 +25,7 @@ public class AddButton extends JDialog {
 	private JButton addWordButton;
 	private JLabel lbStatus;
 	Databases dbDatabases = new Databases();
+	TranslateWord checWord = new TranslateWord();
 
 	/**
 	 * Create the dialog.
@@ -64,10 +66,14 @@ public class AddButton extends JDialog {
 		addWordButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dbDatabases.initiAndConnectDB();
-				 try {
-				dbDatabases.insertDB2(wordEN.getText().charAt(0) + "",
-						wordEN.getText(), wordVI.getText());
-				lbStatus.setText("Add success!");
+				try {
+					if (checWord.checkWord(wordEN.getText()) == false) {
+						dbDatabases.insertDB2(wordEN.getText().charAt(0) + "",
+								wordEN.getText(), wordVI.getText());
+						lbStatus.setText("Add success!");
+					} else {
+						lbStatus.setText("tu ban them da ton tai!");
+					}
 
 				} catch (Exception e) {
 					// TODO: handle exception

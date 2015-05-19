@@ -28,8 +28,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -38,7 +38,7 @@ public class MainView {
 	private JFrame frame;
 	private JTextField wordSearch;
 	private JList<String> jListWordEN = null;
-	JTextPane txtWordVI;
+	JTextArea txtWordVI;
 	private static String wordEdit = "";
 	TranslateWord translateWord = new TranslateWord();
 	Databases databases = new Databases();
@@ -172,7 +172,9 @@ public class MainView {
 		frame.getContentPane().add(panel_2);
 		panel_2.setLayout(null);
 
-		txtWordVI = new JTextPane();
+		txtWordVI = new JTextArea();
+		txtWordVI.setEditable(false);
+		// txtWordVI.
 		txtWordVI.setBounds(10, 36, 479, 375);
 		panel_2.add(txtWordVI);
 
@@ -208,6 +210,19 @@ public class MainView {
 		});
 		btnNewButton_3.setBounds(235, 0, 89, 23);
 		panel_2.add(btnNewButton_3);
+
+		JButton btnNewButton_1 = new JButton("UpDataByFiletxt");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// UpdateButton upDateButton = new UpdateButton();
+				// upDateButton.cr
+				UpdateButton.createAndShowGUI();
+			}
+		});
+		btnNewButton_1.setFont(new Font("Times New Roman", Font.BOLD
+				| Font.ITALIC, 11));
+		btnNewButton_1.setBounds(340, 0, 118, 23);
+		panel_2.add(btnNewButton_1);
 
 		wordSearch = createTextField();
 		wordSearch.setBounds(235, 54, 372, 28);
@@ -301,6 +316,17 @@ public class MainView {
 				String filter = wordSearch.getText();
 				filterModel((DefaultListModel<String>) jListWordEN.getModel(),
 						filter);
+			}
+		});
+		wordSearch.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				// System.out.println("Enter key pressed");
+				translateWord
+						.translateWord(MainView.this.wordSearch, txtWordVI);
+
 			}
 		});
 		return wordSearch;

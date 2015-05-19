@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import javass20142.dictionary.database.Databases;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
 public class TranslateWord {
 	ArrayList<String> listWord = new ArrayList<String>();
 	Databases databases = new Databases();
 
-	public void translateWord(JTextField wordSearch, JTextPane txtWordVI) {
+	public void translateWord(JTextField wordSearch, JTextArea txtWordVI) {
 		String wordsearch = wordSearch.getText();
 		if (checkWord(wordsearch)) {
 			txtWordVI.setText(databases.getwordVI(

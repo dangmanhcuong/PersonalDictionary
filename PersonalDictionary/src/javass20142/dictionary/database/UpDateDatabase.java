@@ -7,59 +7,86 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javass20142.dictionary.model.TranslateWord;
+
 public class UpDateDatabase {
+	TranslateWord checkWord = new TranslateWord();
+
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		UpDateDatabase iDatabase = new UpDateDatabase();
-		iDatabase.readFile();
+		System.out.println(iDatabase
+				.readFile("C:\\Users\\Nagato\\Desktop\\testupdate.txt"));
 	}
 
-	public void readFile()
+	public String readFile(String linkFile)
 			throws com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException {
 		Databases Data = new Databases();
 		Data.initiAndConnectDB();
-		// Path srcFile = Paths
-		// .get("F:\\Dictionary\\voice\\stardict editor\\en_vi.txt");
-		Path srcFile = Paths
-				.get("F:\\Dictionary\\voice\\stardict editor\\en_vii.txt");
+		Path srcFile = Paths.get(linkFile);
 		Charset cs = Charset.forName("UTF-8");
 		try (BufferedReader reader = Files.newBufferedReader(srcFile, cs)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				// String lINEString = line.to
-				writeData(line, Data);
+				try {
+					writeData(line, Data);
+				} catch (Exception e) {
+					// TODO: handle exception
+					return "false";
+				}
+
 			}
+			return "success";
 		} catch (IOException e) {
-			System.err.format("IOException: %s%n", e);
+			// System.err.format("IOException: %s%n", e);
+			return "fail";
 		}
 	}
 
 	public void writeData(String line, Databases Data) {
 		int cs1 = line.indexOf("@");
-		if (cs1 != -1) {
-			line = line.replace("'", "");
-			String wordEN = line.substring(0, cs1).trim().toLowerCase();
-			String wordVI = line.substring(cs1 + 1, line.length()).trim()
-					.replace("\\n", "\n");
+		line = line.replace("'", "");
+		String wordEN = line.substring(0, cs1).trim().toLowerCase();
+		String wordVI = line.substring(cs1 + 1, line.length()).trim()
+				.replace("\\n", "\n");
+		if (checkWord.checkWord(wordEN) == false) {
 			char c = wordEN.charAt(0);
 			if ((c >= 97) && (c <= 122)) {
-				Data.insertDB2("tbl_word" + line.charAt(0), wordEN, wordVI);
+				Data.insertDB2(line.charAt(0) + "", wordEN, wordVI);
 			} else {
-				Data.insertDB2("tbl_wordother", wordEN, wordVI);
-			}
-
-		} else {
-			int cs2 = line.indexOf("\t");
-			line = line.replace("'", "");
-			String wordEN = line.substring(0, cs2).trim();
-			String wordVI = line.substring(cs2 + 1, line.length()).trim()
-					.replace("\\n", "\n");
-			char c = wordEN.charAt(0);
-			if ((c >= 97) && (c <= 122)) {
-				Data.insertDB2("tbl_word" + line.charAt(0), wordEN, wordVI);
-			} else {
-				Data.insertDB2("tbl_wordother", wordEN, wordVI);
+				Data.insertDB2("other", wordEN, wordVI);
 			}
 		}
+
 	}
+
+	// public void writeData(String line, Databases Data) {
+	// int cs1 = line.indexOf("@");
+	// if (cs1 != -1) {
+	// line = line.replace("'", "");
+	// String wordEN = line.substring(0, cs1).trim().toLowerCase();
+	// String wordVI = line.substring(cs1 + 1, line.length()).trim()
+	// .replace("\\n", "\n");
+	// char c = wordEN.charAt(0);
+	// if ((c >= 97) && (c <= 122)) {
+	// Data.insertDB2(line.charAt(0) + "", wordEN, wordVI);
+	// } else {
+	// Data.insertDB2("other", wordEN, wordVI);
+	// }
+	//
+	// } else {
+	// int cs2 = line.indexOf("\t");
+	// line = line.replace("'", "");
+	// String wordEN = line.substring(0, cs2).trim();
+	// String wordVI = line.substring(cs2 + 1, line.length()).trim()
+	// .replace("\\n", "\n");
+	// char c = wordEN.charAt(0);
+	// if ((c >= 97) && (c <= 122)) {
+	// Data.insertDB2(line.charAt(0) + "", wordEN, wordVI);
+	// } else {
+	// Data.insertDB2("other", wordEN, wordVI);
+	// }
+	// }
+	// }
 }
