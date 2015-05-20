@@ -110,13 +110,13 @@ public class Databases {
 		System.out.println("connection closed...");
 	}
 
-	public void insertDB(String wordEN, String wordVI) {
-		String sql = "INSERT INTO `dictionary`.`tb_dictionary` (`wordEN`, `wordVI`) VALUES ('"
-				+ wordEN + "', '" + wordVI + "')";
-		upDateData(sql);
-		System.out.println("Inserted records into the table...");
-
-	}
+//	public void insertDB(String wordEN, String wordVI) {
+//		String sql = "INSERT INTO `dictionary`.`tb_dictionary` (`wordEN`, `wordVI`) VALUES ('"
+//				+ wordEN + "', '" + wordVI + "')";
+//		upDateData(sql);
+//		System.out.println("Inserted records into the table...");
+//
+//	}
 
 	public void insertDB2(String dbName, String wordEN, String wordVI) {
 		String sql = "INSERT INTO `dictionary`.`tbl_word" + dbName
@@ -168,21 +168,21 @@ public class Databases {
 
 	}
 
-	public void filterWord(String tblName, String stringFilter) {
-		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
-				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter + "%'");
-		try {
-			while (rSet.next()) {
-				String aString = rSet.getString("wordEN");
-				System.out.println(aString);
-
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+//	public void filterWord(String tblName, String stringFilter) {
+//		ResultSet rSet = getResult("SELECT wordEN FROM `dictionary`.`"
+//				+ tblName + "`" + " WHERE wordEN LIKE '" + stringFilter + "%'");
+//		try {
+//			while (rSet.next()) {
+//				String aString = rSet.getString("wordEN");
+//				System.out.println(aString);
+//
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 	public DefaultListModel<String> filterWord2(String tblName,
 			String stringFilter) {
