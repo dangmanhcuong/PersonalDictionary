@@ -79,7 +79,7 @@ public class EditButton extends JDialog {
 					lbStatus.setText("update success");
 				} catch (Exception e) {
 					// TODO: handle exception
-					lbStatus.setText("update fail");
+					lbStatus.setText("update fail @@ ");
 				}
 
 			}

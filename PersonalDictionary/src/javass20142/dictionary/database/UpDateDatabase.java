@@ -23,24 +23,30 @@ public class UpDateDatabase {
 			throws com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException {
 		Databases Data = new Databases();
 		Data.initiAndConnectDB();
-		Path srcFile = Paths.get(linkFile);
-		Charset cs = Charset.forName("UTF-8");
-		try (BufferedReader reader = Files.newBufferedReader(srcFile, cs)) {
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				// String lINEString = line.to
-				try {
-					writeData(line, Data);
-				} catch (Exception e) {
-					// TODO: handle exception
-					return "false";
-				}
+		try {
+			Path srcFile = Paths.get(linkFile);
+			Charset cs = Charset.forName("UTF-8");
+			try (BufferedReader reader = Files.newBufferedReader(srcFile, cs)) {
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					// String lINEString = line.to
+					try {
+						writeData(line, Data);
+					} catch (java.lang.NullPointerException exception) {
+						return "ban chua chon duong dan";
+					} catch (Exception e) {
+						// TODO: handle exception
+						return "false";
+					}
 
+				}
+				return "success";
+			} catch (IOException e) {
+				// System.err.format("IOException: %s%n", e);
+				return "fail";
 			}
-			return "success";
-		} catch (IOException e) {
-			// System.err.format("IOException: %s%n", e);
-			return "fail";
+		} catch (java.lang.NullPointerException e) {
+			return "ban chua chon duong dan";
 		}
 	}
 
